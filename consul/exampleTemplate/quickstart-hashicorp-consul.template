@@ -44,7 +44,7 @@
                 "i2.8xlarge"
             ],
             "ConstraintDescription": "Choose an instance type.",
-            "Default": "t2.medium"
+            "Default": "t2.micro"
         },
         "ConsulEc2RetryTagKey": {
             "Description": "The Amazon EC2 instance tag key to filter on when joining to other Consul nodes.",

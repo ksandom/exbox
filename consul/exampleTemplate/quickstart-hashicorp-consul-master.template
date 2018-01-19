@@ -111,7 +111,7 @@
         },
         "ConsulInstanceType": {
             "Type": "String",
-            "Default": "t2.medium",
+            "Default": "t2.micro",
             "Description": "Consul Instance type",
             "AllowedValues": [
                 "t2.micro",
