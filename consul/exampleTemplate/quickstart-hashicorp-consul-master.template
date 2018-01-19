@@ -87,7 +87,8 @@
     "Parameters": {
         "AvailabilityZones": {
             "Description": "List of Availability Zones to use for the subnets in the VPC. Note: The logical order is preserved (3 AZs are used for this deployment)",
-            "Type": "List<AWS::EC2::AvailabilityZone::Name>"
+            "Type": "List<AWS::EC2::AvailabilityZone::Name>",
+            "Default": "eu-west-1a,eu-west-1b,eu-west-1c"
         },
         "AccessCIDR": {
             "AllowedPattern": "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\/([0-9]|[1-2][0-9]|3[0-2]))$",
