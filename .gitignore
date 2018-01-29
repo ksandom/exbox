@@ -1,1 +1,5 @@
 *log
+.vagrant
+*gz
+*tar
+*bz2
