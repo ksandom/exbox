@@ -1,0 +1,4 @@
+#!/bin/bash
+# Download everything now so you don't have to do it on every single node every time. This will save you time and bandwidth.
+
+# TODO do this.
