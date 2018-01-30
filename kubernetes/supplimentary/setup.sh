@@ -8,10 +8,7 @@ nodeURL='https://storage.googleapis.com/kubernetes-release/release/v1.9.1/kubern
 function master1
 {
     prep
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-    apt-get update
-    apt-get install -y docker-ce wget
+    installDocker
 
     get "$serverURL"
     unpack "$serverURL"
@@ -20,14 +17,28 @@ function master1
 function node
 {
     prep
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-    apt-get update
-    apt-get install -y docker-ce wget
+    installDocker
     
     #get "$clientURL"
     get "$nodeURL"
     unpack "$nodeURL"
+}
+
+function client
+{
+    prep
+    installDocker
+
+    get "$clientURL"
+    unpack "$clientURL"
+}
+
+function installDocker
+{
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    apt-get update
+    apt-get install -y docker-ce wget
 }
 
 function preCache
@@ -83,6 +94,9 @@ case $1 in
     
     "node") # Provision a worker node.
         node
+    ;;
+    "client") # Provision a client.
+        client
     ;;
     "precache") # Warm the cache so that stuff doesn't have to be downloaded on each server.
         preCache

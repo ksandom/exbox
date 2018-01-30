@@ -67,4 +67,11 @@ Vagrant.configure("2") do |config|
     SHELL
   end
 
+  config.vm.define "client" do |client|
+    client.vm.box = "ubuntu/xenial64"
+    client.vm.provision "file", source: "suplimentary", destination: "/usr/setup"
+    client.vm.provision "shell", inline: <<-SHELL
+      /usr/setup/setup.sh client
+    SHELL
+  end
 end
