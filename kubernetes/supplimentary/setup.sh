@@ -72,7 +72,7 @@ function unpack
 function prep
 {
     if [ "$workingDir" == '' ]; then
-        export workingDir="${1:-/usr/setup/cache}"
+        export workingDir="${1:-/tmp/setup/cache}"
         mkdir -p "$workingDir"
         cd "$workingDir"
         echo "Prepped $workingDir."
