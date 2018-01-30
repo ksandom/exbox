@@ -14,6 +14,7 @@ function master1
     apt-get install -y docker-ce wget
 
     get "$serverURL"
+    unpack "$serverURL"
 }
 
 function node
@@ -26,6 +27,7 @@ function node
     
     #get "$clientURL"
     get "$nodeURL"
+    unpack "$nodeURL"
 }
 
 function preCache
@@ -46,6 +48,12 @@ function get
     else
         echo "Skipping fetch of $fileName since it already exists."
     fi
+}
+
+function unpack
+{
+    url="$1"
+    fileName=`basename "$url"`
     
     tar -xzf "$fileName"
 }
@@ -53,7 +61,7 @@ function get
 function prep
 {
     if [ "$workingDir" == '' ]; then
-        export workingDir="/usr/setup/cache"
+        export workingDir="${1:-/usr/setup/cache}"
         mkdir -p "$workingDir"
         cd "$workingDir"
         echo "Prepped $workingDir."
