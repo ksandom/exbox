@@ -54,11 +54,14 @@ function get
     url="$1"
     fileName=`basename "$url"`
     
+    startDir=`pwd`
+    cd "$downloadDir"
     if ! [ -e "$fileName" ]; then
         wget "$url"
     else
         echo "Skipping fetch of $fileName since it already exists."
     fi
+    cd "$startDir"
 }
 
 function unpack
@@ -66,18 +69,24 @@ function unpack
     url="$1"
     fileName=`basename "$url"`
     
-    tar -xzf "$fileName"
+    tar -xzf "$downloadDir/$fileName"
 }
 
 function prep
 {
     if [ "$workingDir" == '' ]; then
-        export workingDir="${1:-/tmp/setup/cache}"
+        export workingDir="${1:-/tmp/setup}"
         mkdir -p "$workingDir"
         cd "$workingDir"
         echo "Prepped $workingDir."
     else
         echo "Already prepped $workingDir."
+    fi
+    
+    if [ -e /vagrant ]; then
+        downloadDir="/vagrant/supplimentary/cache"
+    else
+        downloadDir="$workingDir"
     fi
 }
 
