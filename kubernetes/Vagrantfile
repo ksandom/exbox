@@ -43,29 +43,29 @@ Vagrant.configure("2") do |config|
     SHELL
   end
 
-  config.vm.define "node4" do |node4|
-    node4.vm.box = "ubuntu/xenial64"
-    node4.vm.provision "file", source: "suplimentary", destination: "/usr/setup"
-    node4.vm.provision "shell", inline: <<-SHELL
-      /usr/setup/setup.sh node
-    SHELL
-  end
-
-  config.vm.define "node5" do |node5|
-    node5.vm.box = "ubuntu/xenial64"
-    node5.vm.provision "file", source: "suplimentary", destination: "/usr/setup"
-    node5.vm.provision "shell", inline: <<-SHELL
-      /usr/setup/setup.sh node
-    SHELL
-  end
-
-  config.vm.define "node6" do |node6|
-    node6.vm.box = "ubuntu/xenial64"
-    node6.vm.provision "file", source: "suplimentary", destination: "/usr/setup"
-    node6.vm.provision "shell", inline: <<-SHELL
-      /usr/setup/setup.sh node
-    SHELL
-  end
+#   config.vm.define "node4" do |node4|
+#     node4.vm.box = "ubuntu/xenial64"
+#     node4.vm.provision "file", source: "suplimentary", destination: "/usr/setup"
+#     node4.vm.provision "shell", inline: <<-SHELL
+#       /usr/setup/setup.sh node
+#     SHELL
+#   end
+# 
+#   config.vm.define "node5" do |node5|
+#     node5.vm.box = "ubuntu/xenial64"
+#     node5.vm.provision "file", source: "suplimentary", destination: "/usr/setup"
+#     node5.vm.provision "shell", inline: <<-SHELL
+#       /usr/setup/setup.sh node
+#     SHELL
+#   end
+# 
+#   config.vm.define "node6" do |node6|
+#     node6.vm.box = "ubuntu/xenial64"
+#     node6.vm.provision "file", source: "suplimentary", destination: "/usr/setup"
+#     node6.vm.provision "shell", inline: <<-SHELL
+#       /usr/setup/setup.sh node
+#     SHELL
+#   end
 
   config.vm.define "client" do |client|
     client.vm.box = "ubuntu/xenial64"
