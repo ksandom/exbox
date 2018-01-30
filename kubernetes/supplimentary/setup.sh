@@ -41,7 +41,7 @@ function get
     url="$1"
     fileName=`basename "$url"`
     
-    if [ -e "$fileName" ]; then
+    if ! [ -e "$fileName" ]; then
         wget "$url"
     else
         echo "Skipping fetch of $fileName since it already exists."
