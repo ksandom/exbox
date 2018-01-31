@@ -16,7 +16,7 @@ function master1
     
     # Wait for the registration tokens to be created.
     while ! curl localhost:8080/v1/registrationTokens | grep 'docker run'; do
-        echo "The port is open, but the tokens have not yet been created. Please browse to http://localhost:8080 and follow the instructions to \"Add a newhost\" (top right). When asked for the host, set it to \"http://192.168.30.10\" At that point, this should leap back into action. When I find a way to automate this, I will."
+        echo "The port is open, but the tokens have not yet been created. Please browse to http://localhost:8080 and follow the instructions to \"Add a newhost\" (top right). When asked for the host, set it to \"http://192.168.30.10:8080\" At that point, this should leap back into action. When I find a way to automate this, I will."
         sleep 3
     done
     
