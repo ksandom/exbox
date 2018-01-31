@@ -8,12 +8,14 @@ function master1
 
     docker run -d --restart=unless-stopped -p 8080:8080 rancher/server:stable
     
+    # Wait for the master to come up.
     echo -n "Waiting for rancher to come up"
     while ! curl localhost:8080; do
         echo -n "."
     done
     echo " YAY!"
     
+    # Find out what the command is to get a node to join, and save that for others to use.
     curl localhost:8080/v1/registrationTokens | sed 's/^.*"command":"sudo //g' | cut -d\" -f1 | sed 's/\\//g' > /vagrant/registrationCommand.secret
 }
 
@@ -22,6 +24,7 @@ function node
     prep
     installDocker
     
+    # Join the cluser.
     bash -c "`cat /vagrant/registrationCommand.secret`"
 }
 
@@ -99,6 +102,10 @@ function showHelp
 case $1 in
     "master1") # Provision the first master node.
         master1
+    ;;
+    
+    "master2") # Provision the second master node.
+        master2
     ;;
     
     "node") # Provision a worker node.
