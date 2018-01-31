@@ -12,6 +12,7 @@ function master1
     echo -n "Waiting for rancher to come up"
     while ! curl localhost:8080; do
         echo -n "."
+        sleep 2
     done
     echo " YAY!"
     
