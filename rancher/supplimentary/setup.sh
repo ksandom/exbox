@@ -9,12 +9,13 @@ function master1
     docker run -d --restart=unless-stopped -p 8080:8080 rancher/server:stable
     
     # Wait for the master to come up.
-    echo -n "Waiting for rancher to come up"
     while ! curl localhost:8080; do
-        echo -n "."
-        sleep 2
+        echo "Waiting for rancher to come up"
+        sleep 3
     done
-    echo " YAY!"
+    
+    echo "Waiting 30 more seconds now that the port is open."
+    sleep 30
     
     # Find out what the command is to get a node to join, and save that for others to use.
     curl localhost:8080/v1/registrationTokens | sed 's/^.*"command":"sudo //g' | cut -d\" -f1 | sed 's/\\//g' > /vagrant/registrationCommand.secret
