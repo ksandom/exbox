@@ -14,8 +14,12 @@ function master1
         sleep 3
     done
     
-    echo "Waiting 30 more seconds now that the port is open."
-    sleep 30
+    # Wait for the registration tokens to be created.
+    while ! curl localhost:8080/v1/registrationTokens | grep 'docker run'; do
+        echo "The port is open, but the tokens have not yet been created. Please browse to http://localhost:8080 and follow the instructions to \"Add a newhost\" (top right). When asked for the host, set it to \"http://192.168.30.10\" At that point, this should leap back into action. When I find a way to automate this, I will."
+        sleep 3
+    done
+    
     
     # Find out what the command is to get a node to join, and save that for others to use.
     curl localhost:8080/v1/registrationTokens | sed 's/^.*"command":"sudo //g' | cut -d\" -f1 | sed 's/\\//g' > /vagrant/registrationCommand.secret

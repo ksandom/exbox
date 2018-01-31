@@ -9,4 +9,5 @@ This gives you an empty Rancher cluster with nodes attached that you can play wi
 
 ## TODOs
 
-* Add a [second master node](http://rancher.com/docs/rancher/latest/en/installing-rancher/installing-server/#launching-rancher-server---full-activeactive-ha) to make it HA. 
+* Automate the generation of the API keys, so no manual steps are required to add the nodes.
+* Add a [second master node](http://rancher.com/docs/rancher/latest/en/installing-rancher/installing-server/#launching-rancher-server---full-activeactive-ha) to make it HA.
