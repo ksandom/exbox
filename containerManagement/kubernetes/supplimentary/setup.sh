@@ -83,10 +83,10 @@ function prep
         echo "Already prepped $workingDir."
     fi
     
-    if [ -e /vagrant ]; then
-        downloadDir="/vagrant/supplimentary/cache"
+    if [ -e /vagrant/supplimentary/cache ]; then
+        export downloadDir="/vagrant/supplimentary/cache"
     else
-        downloadDir="$workingDir"
+        export downloadDir="$workingDir"
     fi
 }
 
