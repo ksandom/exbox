@@ -8,7 +8,7 @@ nodeURL='https://storage.googleapis.com/kubernetes-release/release/v1.9.1/kubern
 function master1
 {
     prep
-    installDocker
+    installIncludedDocker
 
     get "$serverURL"
     unpack "$serverURL"
@@ -17,7 +17,7 @@ function master1
 function node
 {
     prep
-    installDocker
+    installIncludedDocker
     
     #get "$clientURL"
     get "$nodeURL"
@@ -27,18 +27,24 @@ function node
 function client
 {
     prep
-    installDocker
+    installIncludedDocker
 
     get "$clientURL"
     unpack "$clientURL"
 }
 
-function installDocker
+function installLatestDocker
 {
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     apt-get update
     apt-get install -y docker-ce wget
+}
+
+function installIncludedDocker
+{
+    apt-get update
+    apt-get install -qy docker.io wget
 }
 
 function preCache
