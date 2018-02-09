@@ -77,9 +77,15 @@ function setupKubeAdmUser
 {
     destinationUser='vagrant'
     destinationGroup="$destinationUser"
-    mkdir -p ~$destinationUser/.kube
-    sudo cp -i /etc/kubernetes/admin.conf ~$destinationUser/.kube/config
-    sudo chown -R "$destinationUser:$destinationGroup" ~$destinationUser/.kube
+    sourceConfig='/vagrant/kubeConfig.secret'
+    mkdir -p /home/$destinationUser/.kube
+    sudo cp -i "$sourceConfig" /home/$destinationUser/.kube/config
+    sudo chown -R "$destinationUser:$destinationGroup" /home/$destinationUser/.kube
+    
+    # TODO There is probably a better way, like running the kubectl commands as the user instead of as root. For now I'll work around this by setting up the root user additionally.
+    
+    mkdir -p /root/.kube
+    sudo cp -i "$sourceConfig" /root/.kube/config
 }
 
 function initMaster
@@ -89,6 +95,8 @@ function initMaster
     echo "$myIP" > /vagrant/masterIP.secret
     kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$myIP --kubernetes-version stable-1.8 --skip-preflight-checks | tee  /tmp/startup.log
     
+    sed "s#https://10.0.2.15:6443#https://`getMyIP`:6443#g" /etc/kubernetes/admin.conf > /vagrant/kubeConfig.secret
+
     setupKubeAdmUser
     
     # Flannel
