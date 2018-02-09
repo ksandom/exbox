@@ -93,7 +93,7 @@ function initMaster
     # TODO Check version.
     myIP=`getMyIP`
     echo "$myIP" > /vagrant/masterIP.secret
-    kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$myIP --kubernetes-version stable-1.8 --skip-preflight-checks | tee  /tmp/startup.log
+    kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$myIP --kubernetes-version stable-1.8 --ignore-preflight-errors=all | tee  /tmp/startup.log
     
     sed "s#https://10.0.2.15:6443#https://`getMyIP`:6443#g" /etc/kubernetes/admin.conf > /vagrant/kubeConfig.secret
 
