@@ -16,6 +16,9 @@ function master1
     initMaster
     
     harvestInformation
+    
+    # NOTE This will be removed in more complete setups.
+    allowMasterToParticipate
 }
 
 function node
@@ -67,7 +70,7 @@ function prepAptForKubernetes
 
 function installKubernetesViaApt
 {
-    apt-get install kubelet kubeadm kubernetes-cni
+    apt-get install -y kubelet kubeadm kubernetes-cni
 }
 
 function setupKubeAdmUser
@@ -96,6 +99,11 @@ function initMaster
 function harvestInformation
 {
     grep 'kubeadm join' /tmp/startup.log > /vagrant/join.secret
+}
+
+function allowMasterToParticipate
+{
+    kubectl taint nodes --all node-role.kubernetes.io/master-
 }
 
 function initNode
