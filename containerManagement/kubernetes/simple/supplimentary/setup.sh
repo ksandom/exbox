@@ -9,25 +9,33 @@ function master1
 {
     prep
     installIncludedDocker
-
-    get "$serverURL"
-    unpack "$serverURL"
+    prepAptForKubernetes
+    
+    installKubernetesViaApt
+    
+    initMaster
+    
+    harvestInformation
 }
 
 function node
 {
     prep
     installIncludedDocker
+    prepAptForKubernetes
     
-    #get "$clientURL"
-    get "$nodeURL"
-    unpack "$nodeURL"
+    installKubernetesViaApt
+    
+    # TODO Test is this actually works on a node. It may need some tweaking to be useful.
+    setupKubeAdmUser
+    
 }
 
 function client
 {
     prep
     installIncludedDocker
+    prepAptForKubernetes
 
     get "$clientURL"
     unpack "$clientURL"
@@ -47,12 +55,67 @@ function installIncludedDocker
     apt-get install -qy docker.io wget
 }
 
+function prepAptForKubernetes
+{
+    apt-get update
+    apt-get install -y apt-transport-https
+    curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+    
+    echo "deb http://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
+    apt-get update
+}
+
+function installKubernetesViaApt
+{
+    apt-get install kubelet kubeadm kubernetes-cni
+}
+
+function setupKubeAdmUser
+{
+    destinationUser='vagrant'
+    destinationGroup="$destinationUser"
+    mkdir -p ~$destinationUser/.kube
+    sudo cp -i /etc/kubernetes/admin.conf ~$destinationUser/.kube/config
+    sudo chown -R "$destinationUser:$destinationGroup" ~$destinationUser/.kube
+}
+
+function initMaster
+{
+    # TODO Check version.
+    myIP=`getMyIP`
+    echo "$myIP" > /vagrant/masterIP.secret
+    kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$myIP --kubernetes-version stable-1.8 --skip-preflight-checks | tee  /tmp/startup.log
+    
+    setupKubeAdmUser
+    
+    # Flannel
+    kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+    kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/k8s-manifests/kube-flannel-rbac.yml
+}
+
+function harvestInformation
+{
+    grep 'kubeadm join' /tmp/startup.log > /vagrant/join.secret
+}
+
+function initNode
+{
+    bash -c "`cat /vagrant/join.secret`"
+}
+
+
 function preCache
 {
     prep "supplimentary/cache"
     get "$serverURL"
     get "$nodeURL"
     get "$clientURL"
+}
+
+function getMyIP
+{
+    expectedNetwork='192.168.50'
+    myIP=`ip address | grep "inet.*$expectedNetwork" | awk '{print $2}' | cut -d\/ -f1`
 }
 
 function get
@@ -94,6 +157,9 @@ function prep
     else
         export downloadDir="$workingDir"
     fi
+    
+    swapoff -a
+    sed -i 's/^.*swap$//g' /etc/fstab # Blanks the swap line. Not quite right, but good enough for now.
 }
 
 function showHelp
