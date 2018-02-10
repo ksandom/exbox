@@ -1,0 +1,13 @@
+#!/bin/bash
+# Download everything now so you don't have to do it on every single node every time. This will save you time and bandwidth.
+
+cd `dirname $0`
+
+dirName='supplimentary'
+
+if ! [ -d "$dirName" ]; then
+    echo "Could not find the $dirName directory in `pwd`. Not sane to continue."
+    exit 1
+fi
+
+./supplimentary/setup.sh precache
