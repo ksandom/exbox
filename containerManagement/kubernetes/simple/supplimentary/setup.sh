@@ -79,13 +79,13 @@ function setupKubeAdmUser
     destinationGroup="$destinationUser"
     sourceConfig='/vagrant/kubeConfig.secret'
     mkdir -p /home/$destinationUser/.kube
-    sudo cp -i "$sourceConfig" /home/$destinationUser/.kube/config
+    sudo cp -f "$sourceConfig" /home/$destinationUser/.kube/config
     sudo chown -R "$destinationUser:$destinationGroup" /home/$destinationUser/.kube
     
     # TODO There is probably a better way, like running the kubectl commands as the user instead of as root. For now I'll work around this by setting up the root user additionally.
     
     mkdir -p /root/.kube
-    sudo cp -i "$sourceConfig" /root/.kube/config
+    sudo cp -f "$sourceConfig" /root/.kube/config
 }
 
 function initMaster
@@ -93,15 +93,21 @@ function initMaster
     # TODO Check version.
     myIP=`getMyIP`
     echo "$myIP" > /vagrant/masterIP.secret
-    kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$myIP --kubernetes-version stable-1.8 --ignore-preflight-errors=all | tee  /tmp/startup.log
+    kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$myIP --kubernetes-version stable-1.8 --ignore-preflight-errors=all --skip-preflight-checks | tee  /tmp/startup.log
     
-    sed "s#https://10.0.2.15:6443#https://`getMyIP`:6443#g" /etc/kubernetes/admin.conf > /vagrant/kubeConfig.secret
-
+    generateKubeConfig
     setupKubeAdmUser
     
     # Flannel
     kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
     kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/k8s-manifests/kube-flannel-rbac.yml
+}
+
+function generateKubeConfig
+{
+    myIP=`getMyIP`
+    echo "Using IP: $myIP"
+    sed "s#https://10.0.2.15:6443#https://$myIP:6443#g" /etc/kubernetes/admin.conf > /vagrant/kubeConfig.secret
 }
 
 function harvestInformation
@@ -132,6 +138,7 @@ function getMyIP
 {
     expectedNetwork='192.168.50'
     myIP=`ip address | grep "inet.*$expectedNetwork" | awk '{print $2}' | cut -d\/ -f1`
+    echo $myIP
 }
 
 function get
@@ -197,6 +204,15 @@ case $1 in
     ;;
     "precache") # Warm the cache so that stuff doesn't have to be downloaded on each server.
         preCache
+    ;;
+    "ip") # Debug: Get the IP of the current machine.
+        getMyIP
+    ;;
+    "home") # Debug: Configure home dir config.
+        setupKubeAdmUser
+    ;;
+    "config") # Debug: Generate kube config.
+        generateKubeConfig
     ;;
     *)
         showHelp
