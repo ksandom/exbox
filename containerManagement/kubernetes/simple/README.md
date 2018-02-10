@@ -1,11 +1,16 @@
 # Kubernetes test cluster
 
-State: Still playing.
+State: Working.
 
-This variant is based on [this tutorial](https://blog.alexellis.io/kubernetes-in-10-minutes/).
+This variant is based on [this tutorial](https://blog.alexellis.io/kubernetes-in-10-minutes/). It creates a vanilla kubernetes clusters running a master/node and a node. You can uncomment nodes in the Vagrantfile to get more nodes in the cluster.
 
 ## How
 
-* Run `./precache` to do all your big downloads only once.
+### To start
+
 * Run `vagrant up` to get the virtual machines.
-* Next steps to be written as it gets closer to its final state.
+
+### Test
+
+* vagrant ssh node1
+* `kubectl get all --namespace=kube-system`
