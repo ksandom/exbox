@@ -29,9 +29,7 @@ function node
     
     installKubernetesViaApt
     
-    # TODO Test is this actually works on a node. It may need some tweaking to be useful.
     setupKubeAdmUser
-    
 }
 
 function client
