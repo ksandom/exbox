@@ -29,9 +29,13 @@ function node
     
     installKubernetesViaApt
     
-    # TODO Test is this actually works on a node. It may need some tweaking to be useful.
     setupKubeAdmUser
-    
+}
+
+function provisionClusterContents
+{
+    kubectl run guids --image=alexellis2/guid-service:latest --port 80
+deployment "guids" created
 }
 
 function client
@@ -198,6 +202,9 @@ case $1 in
     
     "node") # Provision a worker node.
         node
+    ;;
+    "provisionClusterContents") # Provision some stuff inside the cluster.
+        provisionClusterContents
     ;;
     "client") # Provision a client.
         client
