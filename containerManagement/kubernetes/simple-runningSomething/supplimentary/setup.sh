@@ -36,8 +36,7 @@ function node
 
 function provisionClusterContents
 {
-    kubectl run guids --image=alexellis2/guid-service:latest --port 80
-deployment "guids" created
+    kubectl run guids --image=alexellis2/guid-service:latest --port 80 deployment "guids" created
 }
 
 function client
