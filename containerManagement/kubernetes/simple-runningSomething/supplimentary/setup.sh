@@ -16,9 +16,6 @@ function master1
     initMaster
     
     harvestInformation
-    
-    # NOTE This will be removed in more complete setups.
-    allowMasterToParticipate
 }
 
 function node
@@ -36,7 +33,19 @@ function node
 
 function provisionClusterContents
 {
+    while ! kubectl get nodes | grep "`hostname`.*Ready"; do
+        echo "Waiting for the cluster to come up before deploying something to it.
+        kubectl get nodes
+        
+        sleep 5"
+    done
+    
+    
     kubectl run guids --image=alexellis2/guid-service:latest --port 80 deployment "guids" created
+    
+    kubectl get nodes
+    kubectl get all --namespace=kube-system
+    kubectl get pods
 }
 
 function client
@@ -102,6 +111,9 @@ function initMaster
     
     generateKubeConfig
     setupKubeAdmUser
+    
+    # NOTE This will be removed in more complete setups.
+    # allowMasterToParticipate
     
     # Flannel
     kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
@@ -195,6 +207,12 @@ function showHelp
     grep '["]) #' $0 | cut -d\" -f 2- | sed 's/["]) # /	/g' | column -ts \	
 }
 
+
+if [ "$2" != '' ]; then
+    hostname "$2"
+    hostname > /etc/hostname
+    echo "127.0.0.1		$2" >> /etc/hosts
+fi
 
 case $1 in
     "master1") # Provision the first master node.

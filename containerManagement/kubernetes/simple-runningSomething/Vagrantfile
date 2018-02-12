@@ -8,7 +8,7 @@ Vagrant.configure("2") do |config|
     master1.vm.network "private_network", ip: "192.168.50.10"
     master1.vm.network "forwarded_port", guest: 80, host: 2080
     master1.vm.provision "shell", inline: <<-SHELL
-      /vagrant/supplimentary/setup.sh master1
+      /vagrant/supplimentary/setup.sh master1 master1
     SHELL
   end
 
@@ -16,7 +16,7 @@ Vagrant.configure("2") do |config|
 #     master2.vm.box = "ubuntu/xenial64"
 #     master2.vm.network "private_network", ip: "192.168.50.11"
 #     master2.vm.provision "shell", inline: <<-SHELL
-#       /vagrant/supplimentary/setup.sh master2
+#       /vagrant/supplimentary/setup.sh master2 master2
 #     SHELL
 #   end
 
@@ -25,28 +25,28 @@ Vagrant.configure("2") do |config|
     node1.vm.network "private_network", ip: "192.168.50.20"
     node1.vm.network "forwarded_port", guest: 80, host: 2081
     node1.vm.provision "shell", inline: <<-SHELL
-      bash -c 'nohup /vagrant/supplimentary/setup.sh node >/dev/null 2>&1 &'
+      bash -c 'nohup /vagrant/supplimentary/setup.sh node node1 >/dev/null 2>&1 &'
+    SHELL
+  end
+
+  config.vm.define "node2" do |node2|
+    node2.vm.box = "ubuntu/xenial64"
+    node2.vm.network "private_network", ip: "192.168.50.21"
+    node2.vm.network "forwarded_port", guest: 80, host: 2082
+    node2.vm.provision "shell", inline: <<-SHELL
+      bash -c 'nohup /vagrant/supplimentary/setup.sh node node2 >/dev/null 2>&1 &'
       
       # Run this on the last node, or when the cluster has enough nodes to provision stuff.
       bash -c 'nohup /vagrant/supplimentary/setup.sh provisionClusterContents >/dev/null 2>&1 &'
     SHELL
   end
-
-#   config.vm.define "node2" do |node2|
-#     node2.vm.box = "ubuntu/xenial64"
-#     node2.vm.network "private_network", ip: "192.168.50.21"
-#     node2.vm.network "forwarded_port", guest: 80, host: 2082
-#     node2.vm.provision "shell", inline: <<-SHELL
-#       bash -c 'nohup /vagrant/supplimentary/setup.sh node >/dev/null 2>&1 &'
-#     SHELL
-#   end
 # 
 #   config.vm.define "node3" do |node3|
 #     node3.vm.box = "ubuntu/xenial64"
 #     node3.vm.network "private_network", ip: "192.168.50.22"
 #     node3.vm.network "forwarded_port", guest: 80, host: 2083
 #     node3.vm.provision "shell", inline: <<-SHELL
-#       bash -c 'nohup /vagrant/supplimentary/setup.sh node >/dev/null 2>&1 &'
+#       bash -c 'nohup /vagrant/supplimentary/setup.sh node node3 >/dev/null 2>&1 &'
 #     SHELL
 #   end
 
@@ -55,7 +55,7 @@ Vagrant.configure("2") do |config|
 #     node4.vm.network "private_network", ip: "192.168.50.23"
 #     node4.vm.network "forwarded_port", guest: 80, host: 2084
 #     node4.vm.provision "shell", inline: <<-SHELL
-#     bash -c 'nohup /vagrant/supplimentary/setup.sh node >/dev/null 2>&1 &'
+#     bash -c 'nohup /vagrant/supplimentary/setup.sh node node4 >/dev/null 2>&1 &'
 #     SHELL
 #   end
 # 
@@ -64,7 +64,7 @@ Vagrant.configure("2") do |config|
 #     node5.vm.network "private_network", ip: "192.168.50.24"
 #     node5.vm.network "forwarded_port", guest: 80, host: 2085
 #     node5.vm.provision "shell", inline: <<-SHELL
-#     bash -c 'nohup /vagrant/supplimentary/setup.sh node >/dev/null 2>&1 &'
+#     bash -c 'nohup /vagrant/supplimentary/setup.sh node node5 >/dev/null 2>&1 &'
 #     SHELL
 #   end
 # 
@@ -73,7 +73,7 @@ Vagrant.configure("2") do |config|
 #     node6.vm.network "private_network", ip: "192.168.50.25"
 #     node6.vm.network "forwarded_port", guest: 80, host: 2086
 #     node6.vm.provision "shell", inline: <<-SHELL
-#     bash -c 'nohup /vagrant/supplimentary/setup.sh node >/dev/null 2>&1 &'
+#     bash -c 'nohup /vagrant/supplimentary/setup.sh node node6 >/dev/null 2>&1 &'
 #     SHELL
 #   end
 end
