@@ -30,6 +30,8 @@ function node
     installKubernetesViaApt
     
     setupKubeAdmUser
+    
+    initNode
 }
 
 function provisionClusterContents
