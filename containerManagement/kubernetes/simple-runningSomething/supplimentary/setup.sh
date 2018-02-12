@@ -33,6 +33,9 @@ function node
 
 function provisionClusterContents
 {
+    kubectl get nodes
+    kubectl get all --namespace=kube-system
+    
     while ! kubectl get nodes | grep "`hostname`.*Ready"; do
         echo "Waiting for the cluster to come up before deploying something to it.
         kubectl get nodes
