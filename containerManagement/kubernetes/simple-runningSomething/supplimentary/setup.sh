@@ -44,7 +44,7 @@ function provisionClusterContents
     done
     
     
-    kubectl run guids --image=alexellis2/guid-service:latest --port 80 deployment "guids" created
+    kubectl run guids --image=alexellis2/guid-service:latest --port 9000 deployment "guids" created
     
     kubectl get nodes
     kubectl get all --namespace=kube-system
@@ -110,7 +110,7 @@ function initMaster
     # TODO Check version.
     myIP=`getMyIP`
     echo "$myIP" > /vagrant/masterIP.secret
-    kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$myIP --kubernetes-version stable-1.8 --ignore-preflight-errors=all --skip-preflight-checks | tee  /tmp/startup.log
+    kubeadm init --pod-network-cidr=10.244.0.0/16 --apiserver-advertise-address=$myIP  --ignore-preflight-errors=all --skip-preflight-checks | tee  /tmp/startup.log
     
     generateKubeConfig
     setupKubeAdmUser
