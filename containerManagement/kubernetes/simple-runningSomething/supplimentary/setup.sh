@@ -36,6 +36,12 @@ function provisionClusterContents
     kubectl get nodes
     kubectl get all --namespace=kube-system
     
+    while ! which ; do
+        echo "Waiting kubectl to be installed."
+        
+        sleep 5
+    done
+    
     while ! kubectl get nodes | grep "`hostname`.*Ready"; do
         echo "Waiting for the cluster to come up before deploying something to it.
         kubectl get nodes"
