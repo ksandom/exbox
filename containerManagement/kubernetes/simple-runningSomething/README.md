@@ -2,7 +2,9 @@
 
 State: Working.
 
-This variant is based on [this tutorial](https://blog.alexellis.io/kubernetes-in-10-minutes/). It creates a vanilla kubernetes clusters running a master/node and a node. You can uncomment nodes in the Vagrantfile to get more nodes in the cluster.
+This variant is based on [this tutorial](https://blog.alexellis.io/kubernetes-in-10-minutes/). It creates a kubernetes clusters running a 1 master and 2 nodes. You can uncomment nodes in the Vagrantfile to get more nodes in the cluster.
+
+Once you have it up, you can test with `curl localhost:2081/guid`.
 
 ## How
 
@@ -12,5 +14,8 @@ This variant is based on [this tutorial](https://blog.alexellis.io/kubernetes-in
 
 ### Test
 
-* vagrant ssh node1
-* `kubectl get all --namespace=kube-system`
+* `curl localhost:2081/guid`
+* `vagrant ssh node1`
+  * `kubectl get all --namespace=kube-system`
+  * `kubectl get pods`
+  * `kubectl get pods --output=yaml` - This one will loose sanity as you run more pods.
