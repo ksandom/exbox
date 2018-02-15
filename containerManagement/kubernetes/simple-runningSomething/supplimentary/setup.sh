@@ -44,7 +44,7 @@ function provisionClusterContents
     done
     
     
-    kubectl run guids --image=alexellis2/guid-service:latest --port 9000 deployment "guids" created
+    kubectl run guids --image=alexellis2/guid-service:latest --port=9000 --hostport=80 --replicas=2
     
     kubectl get nodes
     kubectl get all --namespace=kube-system
