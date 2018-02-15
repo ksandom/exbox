@@ -38,9 +38,9 @@ function provisionClusterContents
     
     while ! kubectl get nodes | grep "`hostname`.*Ready"; do
         echo "Waiting for the cluster to come up before deploying something to it.
-        kubectl get nodes
+        kubectl get nodes"
         
-        sleep 5"
+        sleep 5
     done
     
     
