@@ -37,7 +37,7 @@ Vagrant.configure("2") do |config|
       bash -c 'nohup /vagrant/supplimentary/setup.sh node node2 >/dev/null 2>&1 &'
       
       # Run this on the last node, or when the cluster has enough nodes to provision stuff.
-      bash -c 'nohup /vagrant/supplimentary/setup.sh provisionClusterContents >/dev/null 2>&1 &'
+      bash -c 'nohup /vagrant/supplimentary/setup.sh provisionClusterContents'
     SHELL
   end
 # 
