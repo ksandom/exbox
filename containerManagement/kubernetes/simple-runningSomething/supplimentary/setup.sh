@@ -36,7 +36,7 @@ function provisionClusterContents
     kubectl get nodes
     kubectl get all --namespace=kube-system
     
-    while ! which ; do
+    while ! which kubectl; do
         echo "Waiting kubectl to be installed."
         
         sleep 5
