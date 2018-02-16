@@ -33,9 +33,6 @@ function node
 
 function provisionClusterContents
 {
-    kubectl get nodes
-    kubectl get all --namespace=kube-system
-    
     while ! which kubectl || ! [ -f ~/.kube/config ]; do
         echo "Waiting kubectl to be installed and configured."
         
@@ -49,6 +46,9 @@ function provisionClusterContents
         sleep 5
     done
     
+    
+    kubectl get nodes
+    kubectl get all --namespace=kube-system
     
     kubectl run guids --image=alexellis2/guid-service:latest --port=9000 --hostport=80 --replicas=2
     
