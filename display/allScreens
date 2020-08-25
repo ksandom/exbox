@@ -1,0 +1,27 @@
+#!/bin/bash
+# Generic comment about what the script does.
+
+function getDisplays
+{
+    xrandr | grep ' connected' | cut -d\  -f1
+}
+
+function enableDisplay
+{
+    echo "Enabling $1"
+    xrandr --output $1 --auto
+}
+
+function fixPositions
+{
+    xrandr --output DP-2 --pos 3840x0
+    xrandr --output DP-3 --pos 0x0
+    # xrandr --output eDP-1 --pos 3000x2160
+    xrandr --output eDP-1 --primary --pos 0x2160
+}
+
+while read display; do
+    enableDisplay "$display"
+done < <(getDisplays)
+
+fixPositions
